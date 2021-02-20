@@ -1,29 +1,18 @@
 <template>
   <div class="home">
-    <p>{{ msg }}</p>
+    <img alt="Vue logo" src="../assets/logo.png">
+    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
   </div>
 </template>
 
 <script lang="ts">
-import { onMounted } from 'vue';
 import { Options, Vue } from 'vue-class-component';
-import axios from 'axios';
+import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
 
-export default {
-  name: 'Home',
-  setup() {
-    const path = 'http://localhost:5000/ping';
-    let msg = '';
-
-    onMounted(() => {
-      axios.get(path).then((res) => {
-        msg = res.data;
-      });
-    });
-
-    return {
-      msg,
-    };
+@Options({
+  components: {
+    HelloWorld,
   },
-};
+})
+export default class Home extends Vue {}
 </script>
