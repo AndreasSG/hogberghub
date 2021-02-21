@@ -25,8 +25,8 @@ class ExpenseService {
     return http.delete(`/expenses`);
   }
 
-  findByTitle(title: string) {
-    return http.get(`/expenses?title=${title}`);
+  findByName(title: string) {
+    return http.get(`/expenses?name=${title}`);
   }
 }
 

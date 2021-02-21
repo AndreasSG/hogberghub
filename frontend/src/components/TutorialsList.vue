@@ -5,14 +5,14 @@
         <input
           type="text"
           class="form-control"
-          placeholder="Search by title"
-          v-model="title"
+          placeholder="Search by name"
+          v-model="name"
         />
         <div class="input-group-append">
           <button
             class="btn btn-outline-secondary"
             type="button"
-            @click="searchTitle"
+            @click="searchByName"
           >
             Search
           </button>
@@ -20,72 +20,68 @@
       </div>
     </div>
     <div class="col-md-6">
-      <h4>Tutorials List</h4>
+      <h4>Expenses List</h4>
       <ul class="list-group">
         <li
           class="list-group-item"
           :class="{ active: index == currentIndex }"
-          v-for="(tutorial, index) in tutorials"
+          v-for="(expense, index) in expenses"
           :key="index"
-          @click="setActiveTutorial(tutorial, index)"
+          @click="setActiveExpenses(expense, index)"
         >
-          {{ tutorial.title }}
+          {{ expense.name }}
         </li>
       </ul>
 
-      <button class="m-3 btn btn-sm btn-danger" @click="removeAllTutorials">
+      <button class="m-3 btn btn-sm btn-danger" @click="removeAllExpenses">
         Remove All
       </button>
     </div>
     <div class="col-md-6">
-      <div v-if="currentTutorial">
-        <h4>Tutorial</h4>
+      <div v-if="currentExpense">
+        <h4>Expense</h4>
         <div>
-          <label><strong>Title:</strong></label> {{ currentTutorial.title }}
+          <label><strong>Name:</strong></label> {{ currentExpense.name }}
         </div>
         <div>
-          <label><strong>Description:</strong></label>
-          {{ currentTutorial.description }}
+          <label><strong>Cost:</strong></label>
+          {{ currentExpense.cost }}
         </div>
         <div>
-          <label><strong>Status:</strong></label>
-          {{ currentTutorial.published ? 'Published' : 'Pending' }}
+          <label><strong>Is a necessary expense:</strong></label>
+          {{ currentExpense.isNecessary ? 'Is necessary' : 'Not necessary' }}
         </div>
 
-        <a
-          class="badge badge-warning"
-          :href="'/tutorials/' + currentTutorial.id"
-        >
+        <a class="badge badge-warning" :href="'/expenses/' + currentExpense.id">
           Edit
         </a>
       </div>
       <div v-else>
         <br />
-        <p>Please click on a Tutorial...</p>
+        <p>Please click on an expense ...</p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import TutorialDataService from '../services/TutorialService';
+import ExpenseService from '../services/ExpenseService';
 
 export default {
   name: 'tutorials-list',
   data() {
     return {
-      tutorials: [],
-      currentTutorial: null,
+      expenses: [],
+      currentExpense: null,
       currentIndex: -1,
-      title: '',
+      name: '',
     };
   },
   methods: {
-    retrieveTutorials() {
-      TutorialDataService.getAll()
+    retrieveExpenses() {
+      ExpenseService.getAll()
         .then((response) => {
-          console.log(response);
-          this.tutorials = response.data;
+          this.expenses = response.data;
           console.log(response.data);
         })
         .catch((e) => {
@@ -94,18 +90,18 @@ export default {
     },
 
     refreshList() {
-      this.retrieveTutorials();
-      this.currentTutorial = null;
+      this.retrieveExpenses();
+      this.currentExpense = null;
       this.currentIndex = -1;
     },
 
-    setActiveTutorial(tutorial, index) {
-      this.currentTutorial = tutorial;
+    setActiveExpenses(expense, index) {
+      this.currentExpense = expense;
       this.currentIndex = index;
     },
 
-    removeAllTutorials() {
-      TutorialDataService.deleteAll()
+    removeAllExpenses() {
+      ExpenseService.deleteAll()
         .then((response) => {
           console.log(response.data);
           this.refreshList();
@@ -115,10 +111,10 @@ export default {
         });
     },
 
-    searchTitle() {
-      TutorialDataService.findByTitle(this.title)
+    searchByName() {
+      ExpenseService.findByName(this.name)
         .then((response) => {
-          this.tutorials = response.data;
+          this.expenses = response.data;
           console.log(response.data);
         })
         .catch((e) => {
@@ -127,7 +123,7 @@ export default {
     },
   },
   mounted() {
-    this.retrieveTutorials();
+    this.retrieveExpenses();
   },
 };
 </script>
