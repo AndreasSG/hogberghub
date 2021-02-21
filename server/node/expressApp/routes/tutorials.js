@@ -12,5 +12,10 @@ router.get('/:id', function (re, res, next) {
   const tutList = [tutOne];
   return res.send(tutList);
 });
+router.post('/', function (re, res, next) {
+  const newTutorial = re.body;
+  console.log('Added ' + newTutorial.title);
+  return res.send({ status: 'OK' });
+});
 
 module.exports = router;
